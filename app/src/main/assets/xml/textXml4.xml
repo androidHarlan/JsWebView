@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<config_ref_root>
+	<config2 key="test">
+ 		<filter2>
+      	  <list>
+            <value>98</value>
+            <value>21</value>
+            <value>96</value>
+            <value>95</value>
+        </list>
+   		</filter2>
+	</config2>
+</config_ref_root>

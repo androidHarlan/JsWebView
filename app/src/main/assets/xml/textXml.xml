@@ -1,0 +1,37 @@
+<root>
+<config key="json" file="xml/textXml4.xml">
+<a></a>
+</config>
+
+<config key="text" >
+<bb>
+	<cc>5555</cc>
+</bb>
+<aa>1213213</aa>
+</config>
+<config key="text2">
+<bb>
+	<cc>
+
+	</cc>
+	<dd></dd>
+</bb>
+<aa>1213213</aa>
+    <filter2>
+        <list>
+            <value >98</value>
+            <value >94</value>
+            <value>96</value>
+            <value>95</value>
+        </list>
+    </filter2>
+ <filter3>
+        <list2>
+            <value>98</value>
+            <value>94</value>
+            <value>96</value>
+            <value>95</value>
+        </list2>
+    </filter3>
+</config>
+</root>

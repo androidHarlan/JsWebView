@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta charset="utf-8"/>
+    <title>测试</title>
+</head>
+<style type="text/css">
+		*{
+			margin: 0;
+			padding: 0;
+		}
+		.rotation_btn,.wifi_btn,.light_btn{
+			display: block;
+			margin: 20px auto 0;
+			width: 80%;
+			height: 50px;
+			background-color: #2fa1f7;
+			border: 1px solid #2fa1f7;
+			outline-color: #fff;
+			letter-spacing: 2px;
+			color: #fff;
+			font-size: 18px;
+		}
+		.mask{
+			position: fixed;
+			display: none;
+			top: 0;
+			left: 0;
+			width: 100%;
+			height: 100%;
+			z-index: 10;
+			background-color: rgba(0, 0, 0, 0.2);
+		}
+		.wifi_pannel{
+			position: absolute;
+			display: none;
+			top: 50%;
+			left: 50%;
+			transform: translate(-50%,-64%);
+			width: 90%;
+			height: 450px;
+			z-index: 12;
+			background-color: #fff;
+			box-shadow: -3px 0px 7px 0 rgba(0, 0, 0, 0.35);
+		}
+		.loading{
+			position: absolute;
+			display: none;
+			top: 50%;
+			left: 50%;
+			transform: translate(-50%,-50%);
+		}
+		.pannel_header{
+			position: relative;
+			height: 60px;
+			line-height: 60px;
+			background-color: #2fa1f7;
+			font-size: 20px;
+			color: #fff;
+			letter-spacing: 2px;
+			text-align: center;
+		}
+		.close_btn{
+			position: absolute;
+			top: 15px;
+			right: 15px;
+			width: 30px;
+			height: 30px;
+			line-height: 30px;
+			text-indent: 3px;
+			background-color: #1f93ea;
+		}
+		.wifi_list{
+			height: 390px;
+			overflow: auto;
+		}
+		.list_item{
+			height: 60px;
+			line-height: 60px;
+			list-style: none;
+			font-size: 0;
+			border-bottom: 1px solid #ddd;
+		}
+		.list_item .wifi_name{
+			display: inline-block;
+			width: 80%;
+			font-size: 18px;
+			text-align: left;
+			text-indent: 20px;
+		}
+		.list_item .wifi_level{
+			display: inline-block;
+			width: 20%;
+			height: 60px;
+			vertical-align: middle;
+		}
+		.wifi_level.level1{
+			background: url("png/level1.png") center center no-repeat;
+		}
+		.wifi_level.level2{
+			background: url("png/level2.png") center center no-repeat;
+		}
+		.wifi_level.level3{
+			background: url("png/level3.png") center center no-repeat;
+		}
+		.wifi_level.level4{
+			background: url("png/level4.png") center center no-repeat;
+		}
+		.psw_pannel{
+			position: absolute;
+			display: none;
+			top: 50%;
+			left: 50%;
+			transform: translate(-50%,-80%);
+			width: 70%;
+			z-index: 16;
+			background-color: #fff;
+			box-shadow: -3px 0px 7px 0 rgba(0, 0, 0, 0.35);
+		}
+		.wifi_title{
+			height: 40px;
+			line-height: 40px;
+			text-align: center;
+			font-size: 20px;
+		}
+		.psw_pannel input{
+			display: block;
+			margin: 0 auto;
+			width: 90%;
+			height: 30px;
+			text-indent: 5px;
+			border-top: 0;
+			border-right: 0;
+			border-left: 0;
+			font-size: 16px;
+			letter-spacing: 3px;
+			border-bottom: 1px solid #2fa1f7;
+			outline: none;
+		}
+		.pannel_footer{
+			margin-top: 20px;
+			font-size: 0;
+		}
+
+		.pannel_footer span{
+			display: inline-block;
+			width: 50%;
+			border-top: 1px solid #eee;
+			border-right: 1px solid #eee;
+			height: 40px;
+			line-height: 40px;
+			font-size: 18px;
+			text-align: center;
+		}
+		.pannel_footer span:last-child{
+			border-right: 0;
+			margin-right: -1px;
+		}
+
+</style>
+
+<body>
+<button class="wifi_btn" ontouchend="checkWifi()">连接wifi</button>
+<button class="light_btn" ontouchend="sendflashlight()">打开闪光灯</button>
+<button class="rotation_btn" ontouchend="sendfrotation()">横竖屏切换</button>
+<button class="geth5data_btn" ontouchend="getH5data()">从h5获取数据</button>
+
+<div class="mask"></div>
+<div class="wifi_pannel">
+    <div class="pannel_header">选择网络
+        <span class="close_btn">╳</span>
+    </div>
+    <ul class="wifi_list">
+    </ul>
+    <span class="loading">搜寻网络中</span>
+</div>
+<div class="psw_pannel">
+    <div class="wifi_title"></div>
+    <input type="password" id="password" name="" placeholder="请输入密码">
+    <div class="pannel_footer">
+        <span class="cancel">取消</span>
+        <span class="connect">连接</span>
+    </div>
+</div>
+<script src="http://cdn.bootcss.com/jquery/2.1.1/jquery.min.js"></script>
+<script type="text/javascript" src="javaScriptSdk.js"></script>
+<script type="text/javascript">
+			$(".wifi_btn").on("touchstart",function(event){
+				event.stopPropagation();
+				$(".mask").show();
+				$(".wifi_list").empty();
+				$(".wifi_pannel").show();
+				$(".loading").show();
+				jsTransactionManagers.call("service:testClass.getwifi","",function(data){
+					var arrayJson = JSON.parse(data);
+					var arr=eval(arrayJson);
+					$(".loading").hide();
+					arr.forEach(function(item,index){
+						var lv;
+						if(item.level > 70){
+						lv = "level1";
+							
+						}
+						else if(item.level > 40){
+						lv = "level2";
+							
+						}
+						else if(item.level > 10){
+							lv = "level3";
+						}
+						else{
+							lv = "level4";
+						}
+
+						var newWifi = $("<li class='list_item'><span class='wifi_name'>"+ item.SSID +"</span><span class='wifi_level " + lv + "'></span></li>");
+						$(".wifi_list").append(newWifi);
+					});
+					$(".list_item").on("click",function(event){
+						event.stopPropagation();
+						var name = $(this).find(".wifi_name").text();
+						checkWifi(name);
+					});
+				});
+			});
+			
+			$(".close_btn").on("click",function(event){
+				event.stopPropagation();
+				$(".mask").hide();
+				$(".wifi_pannel").hide();
+			});
+			
+			$(".cancel").on("click",function(event){
+				event.stopPropagation();
+				$(".mask").css("z-index","12");
+				$(".psw_pannel").hide();
+			});
+			$(".connect").on("click",function(){
+				var ssid = $(".wifi_title").text();
+				var psw = $("#password").val();
+			//	connectWifi();
+				if(psw != ""){
+					jsTransactionManagers.call("service:testClass.connect_wifi","[" + ssid + "," + psw + "]",function(data){
+						//alert(data);
+					});
+					$(".wifi_pannel").hide();
+					$(".mask").hide();
+					$(".psw_pannel").hide();
+				}
+			});
+			
+			function checkWifi(name){
+				jsTransactionManagers.call("service:testClass.wifi_ssid","[" + name + "]",function(data){
+					if('false' == data){
+						$(".wifi_title").text(name);
+						$("#password").val();
+						$(".mask").css("z-index","14");
+						$(".psw_pannel").show();
+					}
+					else{
+						$(".mask").hide();
+						$(".wifi_pannel").hide();
+					}
+				});
+			}
+			
+			function sendflashlight(){
+				//alert(sdk.init())
+				
+			jsTransactionManagers.call("http://test.teacher.tangguoyuan.net/teacher/getChildrenWeekStar.do","{'TEACHER_ID':'000000004c12c0b9014c12d75d730003','SESSION_ID':'000000004c12c0b9014c12d75d730003','PAGENO':0}",function(data){
+				alert(data)
+			});
+
+			}
+			function sendfrotation(){
+				//alert(sdk.init())
+				
+			jsTransactionManagers.call("service:testClass.rotation","",function(data){
+				//alert(data)
+			});
+
+			}
+			function getH5data(){
+				//alert(sdk.init())
+
+			jsTransactionManagers.call("test:testClass.geth5data","",function(data){
+				//alert(data)
+			});
+
+			}
+
+
+</script>
+</body>
+
+</html>

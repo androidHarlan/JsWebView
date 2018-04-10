@@ -1,0 +1,85 @@
+<root>
+ 		<beans>
+        <bean id ="dd" class = "AClass" isSingleton = "false">
+            <property name = "prop_a" value="123"/>
+            <property name="prop_b" reference="bean_b"/>
+            <property name="prop_c" class="XXClass"/>
+            <property name="prop_d" class="XXClass"/>
+            
+            <property name = "prop_e">
+            123
+            </property>
+            
+            
+            <property name = "prop_f">
+                <list>
+                    <item>1</item>
+                    <item>2</item>
+                    <item value="3"/>
+                </list>
+            </property>
+            
+            <property name = "prop_f">
+                <list>
+                    <item>1</item>
+                    <item>2</item>
+                    <item value="3"/>
+                </list>
+                <list></list>
+            </property>
+            
+            <property name = "prop_g">
+                <list>
+                    <item reference="bean_1"/>
+                    <item class="XXClass"/>
+                </list>
+            </property>
+            
+            <property name = "prop_h">
+                <map>
+                    <item key="key_1" value="1"/>
+                    <item key="key_2">1</item>
+                    <item key="key_3" reference="bean_1"></item>
+                </map>
+            </property>
+            
+              
+            <property name = "prop_i">
+                <map>
+                    <item key="key_1">
+                    <map>
+                    	<item key="key_1" value="1"/>
+                    	<item key="key_2">1</item>
+                    	<item key="key_3" reference="bean_1"></item>
+                    	
+                	</map>
+                	</item>
+                    <item key="key_2">1</item>
+                    <item key="key_3" reference="bean_1"></item>
+                </map>
+            </property>
+            
+            
+            <property name = "b">
+                <map>
+                    <item key="key_1" reference="bean_1"/>
+                    <item key="key_2" class="XXClass" value ="5"/>
+                    <item key="key_3" reference="bean_3" class="XXClass"/>
+                </map>
+            </property>
+            
+            
+            
+            <prop name = "prop_b">
+                <list>
+                    <ref bean=""/>
+                </list>
+            </prop>
+            
+            
+            <prop name = "prop_a">
+                123
+            </prop>
+			</bean>
+        </beans>
+</root>

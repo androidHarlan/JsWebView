@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<root>
+    <config key = "ddd">
+        <pool>
+            <maxQueueNum>10</maxQueueNum>
+            <maxQueueSize>10</maxQueueSize>
+            <maxSubrscribeNum>10</maxSubrscribeNum>
+        </pool>
+
+    </config>
+    <config key = "iocManager">
+        <xmlConfigFileLocations>xml/config.xml</xmlConfigFileLocations>
+        <packageLocations>
+            <list>
+                <item>com.tentcoo.pineapple.core</item>
+                <item>com.tentcoo.jswebview.bean</item>
+            </list>
+        </packageLocations>
+    </config>
+
+ <!--   <config key = "555" file ="xml/textXml3.xml">5</config>-->
+    <!-- expter.basicUrl -->
+   <config key="serviceExporter">
+        <basicUrl>service:</basicUrl>
+    </config>
+   <!-- <config key="test">
+        <basicUrl>test:</basicUrl>
+    </config>-->
+
+    <beans>
+        <!-- DispatchWorker -->
+        <bean id ="dispatchWorker" class = "com.tentcoo.pineapple.core.dispatch.DispatchWorker" isSingleton = "false">
+            <property name="resolvers ">
+                <list>
+                    <item class="com.tentcoo.pineapple.core.dispatch.rendering.JsonResolver"/>
+                    <item class="com.tentcoo.pineapple.core.dispatch.rendering.InternalResourceResolver"/>
+                </list>
+            </property>
+            <property name="handlerMapping" reference="a">
+            </property>
+        </bean>
+
+        <bean id="a" class="com.tentcoo.pineapple.core.dispatch.mapping.HandlerMapping">
+            <property name="interceptorRuleMappingList">
+                <list>
+                    <item  reference="interceptorRuleMapping"></item>
+                </list>
+            </property>
+            <property name="exporters">
+                <list>
+                    <item class="com.tentcoo.pineapple.core.dispatch.service.ServiceExporter"></item>
+                </list>
+            </property>
+        </bean>
+
+        <!-- HybridViewContainer.transactionHandlers -->
+        <bean id="transactionHandlers">
+            <list>
+                <item class="com.tentcoo.pineapple.core.dispatch.view.hybrid.BridgeTransactionHandler"></item>
+            </list>
+        </bean>
+
+        <bean id="interceptorRuleMapping" class="com.tentcoo.pineapple.core.dispatch.mapping.InterceptorRuleMapping">
+            <property name="rule" value="**"></property>
+            <property name="interceptor" reference="b"></property>
+        </bean>
+
+        <bean id="b" class="com.tentcoo.jswebview.bean.MyHanderInterceter"></bean>
+    </beans>
+</root>
